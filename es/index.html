@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <script src="/lang-detect.js"></script>
+  <script src="/lang-detect.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thomas Louvet — Lead Developer & Arquitecto de Software</title>
   <meta name="description" content="Thomas Louvet, Lead Developer & Arquitecto de Software. Desarrollo de aplicaciones empresariales robustas y escalables, con atención constante a la calidad arquitectónica y el valor de negocio.">
@@ -51,14 +51,14 @@
   <header>
     <a href="#hero" class="header-logo">Thomas Louvet</a>
     <nav>
-      <a href="#values">Valores</a>
-      <a href="#projects">Proyectos</a>
-      <a href="#side-projects">Proyectos perso.</a>
       <a href="#experience">Experiencia</a>
       <a href="#skills">Competencias</a>
+      <a href="#projects">Proyectos</a>
+      <a href="#side-projects">Proyectos perso.</a>
+      <a href="#values">Valores</a>
       <a href="#education">Formación</a>
     </nav>
-    <div class="lang-switcher">
+    <nav class="lang-switcher" aria-label="Idioma del sitio">
       <a href="/" class="lang-option">FR</a>
       <span class="lang-sep">/</span>
       <a href="/en/" class="lang-option">EN</a>
@@ -66,7 +66,7 @@
       <a href="/es/" class="lang-option active">ES</a>
       <span class="lang-sep">/</span>
       <a href="/ja/" class="lang-option">JA</a>
-    </div>
+    </nav>
   </header>
 
   <!-- ── MAIN ────────────────────────────────────────── -->
@@ -80,147 +80,6 @@
       <div class="hero-cta">
         <a href="#projects" class="btn btn-primary">Ver mis proyectos</a>
         <a href="#contact" class="btn btn-outline">Contactarme</a>
-      </div>
-    </section>
-
-    <!-- VALUES -->
-    <section id="values">
-      <div class="label">Valores</div>
-      <h2 class="section-title">Lo que guía mi trabajo</h2>
-      <p class="section-desc">Cuatro principios fundamentales que orientan mis decisiones técnicas y mi colaboración con los equipos.</p>
-      <div class="grid-2">
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <div class="card-title">Producto</div>
-          <div class="card-desc">Alinear las soluciones técnicas con las necesidades del negocio, poniendo el valor entregado en el centro de cada decisión de arquitectura.</div>
-        </div>
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div class="card-title">Entrega</div>
-          <div class="card-desc">Ciclos cortos e iterativos con retroalimentación rápida. Mejora continua en lugar de perfeccionismo paralizante.</div>
-        </div>
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          </div>
-          <div class="card-title">Arquitectura</div>
-          <div class="card-desc">Construir sistemas escalables y mantenibles con código probado, abstracciones claras y documentación útil.</div>
-        </div>
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div class="card-title">Rendimiento y costes</div>
-          <div class="card-desc">Conciencia del impacto económico de las decisiones técnicas. Optimización de costes en la nube y del rendimiento de las aplicaciones.</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- PROFESSIONAL PROJECTS -->
-    <section id="projects">
-      <div class="label">Proyectos profesionales</div>
-      <h2 class="section-title">Misiones en empresa</h2>
-      <p class="section-desc">Misiones en las que desempeñé el rol de lead técnico, desde el diseño hasta la puesta en producción.</p>
-      <div class="grid-3">
-
-        <div class="card project-card">
-          <div>
-            <div class="project-period">Nov. 2021 — Actualidad</div>
-            <div style="margin: 8px 0;"><span class="role-badge">Lead Developer</span></div>
-            <div class="project-title">Gestión de datos agrícolas</div>
-          </div>
-          <div class="card-desc">Plataforma de recolección de datos de campo para un grupo agroalimentario internacional. 75% backend, 50% frontend.</div>
-          <div class="tags">
-            <span class="tag">React</span>
-            <span class="tag">TypeScript</span>
-            <span class="tag">NestJS</span>
-            <span class="tag">MongoDB</span>
-            <span class="tag">Azure</span>
-            <span class="tag">Docker</span>
-            <span class="tag">Jest</span>
-          </div>
-        </div>
-
-        <div class="card project-card">
-          <div>
-            <div class="project-period">Jun. 2025 — Actualidad</div>
-            <div style="margin: 8px 0;"><span class="role-badge">Tech Lead</span></div>
-            <div class="project-title">Ofertas comerciales asistidas por IA</div>
-          </div>
-          <div class="card-desc">Plataforma multi-aplicación con flujos de trabajo de IA (RAG, IA generativa). Equipo de 2–3 desarrolladores. Primera prod.: ene. 2026.</div>
-          <div class="tags">
-            <span class="tag">React</span>
-            <span class="tag">NestJS</span>
-            <span class="tag">TypeScript</span>
-            <span class="tag">Azure</span>
-            <span class="tag">RAG</span>
-            <span class="tag">Gen AI</span>
-          </div>
-        </div>
-
-        <div class="card project-card">
-          <div>
-            <div class="project-period">Nov. 2024 — Actualidad</div>
-            <div style="margin: 8px 0;"><span class="role-badge">Lead Developer</span></div>
-            <div class="project-title">Gestión de pedidos B2B</div>
-          </div>
-          <div class="card-desc">Plataforma diseñada y desarrollada from scratch — arquitectura, decisiones técnicas y migración a Azure íntegramente a cargo.</div>
-          <div class="tags">
-            <span class="tag">React</span>
-            <span class="tag">NestJS</span>
-            <span class="tag">TypeScript</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">Azure</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SIDE PROJECTS -->
-    <section id="side-projects">
-      <div class="label">Proyectos personales</div>
-      <h2 class="section-title">Exploraciones &amp; experimentos</h2>
-      <p class="section-desc">Experimentos llevados a cabo por curiosidad — explorar un algoritmo, probar una arquitectura o simplemente construir algo útil.</p>
-      <div class="grid-3">
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          </div>
-          <div class="card-title">Path Visualizer</div>
-          <div class="card-desc">Exploración visual de algoritmos de recorrido: DFS, BFS, Dijkstra, A*.</div>
-          <a href="https://path-viz.tlouvet.com/" target="_blank" rel="noopener" class="card-link">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Ver el proyecto
-          </a>
-        </div>
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="7" x2="10" y2="11"/><line x1="18" y1="7" x2="14" y2="11"/><line x1="6" y1="17" x2="10" y2="13"/><line x1="18" y1="17" x2="14" y2="13"/></svg>
-          </div>
-          <div class="card-title">Relagraph</div>
-          <div class="card-desc">Toma de notas colaborativa con organización en grafo y edición en tiempo real.</div>
-        </div>
-
-        <div class="card value-card">
-          <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <div class="card-title">Schedule Finder</div>
-          <div class="card-desc">Herramienta frontend para la planificación de exámenes orales en la universidad — coordinación de horarios simplificada.</div>
-        </div>
-
       </div>
     </section>
 
@@ -279,64 +138,190 @@
     <section id="skills">
       <div class="label">Competencias</div>
       <h2 class="section-title">Stack técnico</h2>
-      <p class="section-desc">Tecnologías utilizadas en producción en proyectos con altos requisitos de calidad y mantenibilidad.</p>
+      <p class="section-desc">Tecnologías y prácticas utilizadas en producción para diseñar, desplegar y hacer evolucionar sistemas robustos.</p>
       <div class="skills-grid">
 
-        <div>
-          <div class="skill-group-label">Tecnologías principales</div>
-          <div class="skill-row">
-            <span class="skill-name">TypeScript</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
+        <div class="skills-col">
+          <div class="skill-group">
+            <div class="skill-group-label">Full-Stack Engineering</div>
+            <div class="skill-tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">React</span>
+              <span class="tag">Node.js / NestJS</span>
+              <span class="tag">REST API Design</span>
+            </div>
           </div>
-          <div class="skill-row">
-            <span class="skill-name">Node.js</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">React</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">NestJS</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">React Query</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">React Hook Form + Zod</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div><span class="skill-years">3 años</span></div>
+          <div class="skill-group">
+            <div class="skill-group-label">Datos</div>
+            <div class="skill-tags">
+              <span class="tag">SQL — MySQL, PostgreSQL</span>
+              <span class="tag">MongoDB</span>
+            </div>
           </div>
         </div>
 
-        <div>
-          <div class="skill-group-label">Infraestructura y herramientas</div>
-          <div class="skill-row">
-            <span class="skill-name">SQL (MySQL, PostgreSQL)</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div><span class="skill-years">3 años</span></div>
+        <div class="skills-col">
+          <div class="skill-group">
+            <div class="skill-group-label">Arquitectura &amp; Diseño</div>
+            <div class="skill-tags">
+              <span class="tag">Domain-Driven Design</span>
+              <span class="tag">Arquitectura Hexagonal</span>
+              <span class="tag">Arquitectura de Soluciones Azure</span>
+              <span class="tag">Estrategia de Testing</span>
+            </div>
           </div>
-          <div class="skill-row">
-            <span class="skill-name">Tailwind CSS + shadcn/ui</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="skill-years">2 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">Azure Portal</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="skill-years">2 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">Azure DevOps</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div><span class="skill-years">3 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">Git</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="skill-years">4 años</span></div>
-          </div>
-          <div class="skill-row">
-            <span class="skill-name">Docker</span>
-            <div class="skill-meta"><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="skill-years">2 años</span></div>
+          <div class="skill-group">
+            <div class="skill-group-label">Cloud &amp; Infrastructure</div>
+            <div class="skill-tags">
+              <span class="tag">Azure</span>
+              <span class="tag">Azure Pipelines (CI/CD)</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Azure DevOps</span>
+              <span class="tag">Git</span>
+            </div>
           </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- PROFESSIONAL PROJECTS -->
+    <section id="projects">
+      <div class="label">Proyectos profesionales</div>
+      <h2 class="section-title">Misiones en empresa</h2>
+      <p class="section-desc">Misiones en las que desempeñé el rol de lead técnico, desde el diseño hasta la puesta en producción.</p>
+      <div class="grid-3">
+
+        <article class="card project-card">
+          <div>
+            <div class="project-period">Nov. 2021 — Actualidad</div>
+            <div class="role-badge-wrapper"><span class="role-badge">Lead Developer</span></div>
+            <div class="project-title">Gestión de datos agrícolas</div>
+          </div>
+          <div class="card-desc">Plataforma de recolección de datos de campo para un grupo agroalimentario internacional. 75% backend, 50% frontend.</div>
+          <div class="tags">
+            <span class="tag">React</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">NestJS</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Azure</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Jest</span>
+          </div>
+        </article>
+
+        <article class="card project-card">
+          <div>
+            <div class="project-period">Jun. 2025 — Actualidad</div>
+            <div class="role-badge-wrapper"><span class="role-badge">Tech Lead</span></div>
+            <div class="project-title">Ofertas comerciales asistidas por IA</div>
+          </div>
+          <div class="card-desc">Plataforma multi-aplicación con flujos de trabajo de IA (RAG, IA generativa). Equipo de 2–3 desarrolladores. Primera prod.: ene. 2026.</div>
+          <div class="tags">
+            <span class="tag">React</span>
+            <span class="tag">NestJS</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">Azure</span>
+            <span class="tag">RAG</span>
+            <span class="tag">Gen AI</span>
+          </div>
+        </article>
+
+        <article class="card project-card">
+          <div>
+            <div class="project-period">Nov. 2024 — Actualidad</div>
+            <div class="role-badge-wrapper"><span class="role-badge">Lead Developer</span></div>
+            <div class="project-title">Gestión de pedidos B2B</div>
+          </div>
+          <div class="card-desc">Plataforma diseñada y desarrollada from scratch — arquitectura, decisiones técnicas y migración a Azure íntegramente a cargo.</div>
+          <div class="tags">
+            <span class="tag">React</span>
+            <span class="tag">NestJS</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Azure</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SIDE PROJECTS -->
+    <section id="side-projects">
+      <div class="label">Proyectos personales</div>
+      <h2 class="section-title">Exploraciones &amp; experimentos</h2>
+      <p class="section-desc">Experimentos llevados a cabo por curiosidad — explorar un algoritmo, probar una arquitectura o simplemente construir algo útil.</p>
+      <div class="grid-3">
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="card-title">Path Visualizer</div>
+          <div class="card-desc">Exploración visual de algoritmos de recorrido: DFS, BFS, Dijkstra, A*.</div>
+          <a href="https://path-viz.tlouvet.com/" target="_blank" rel="noopener" class="card-link">
+            <svg aria-hidden="true" focusable="false" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Ver el proyecto
+          </a>
+        </article>
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="7" x2="10" y2="11"/><line x1="18" y1="7" x2="14" y2="11"/><line x1="6" y1="17" x2="10" y2="13"/><line x1="18" y1="17" x2="14" y2="13"/></svg>
+          </div>
+          <div class="card-title">Relagraph</div>
+          <div class="card-desc">Toma de notas colaborativa con organización en grafo y edición en tiempo real.</div>
+        </article>
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="card-title">Schedule Finder</div>
+          <div class="card-desc">Herramienta frontend para la planificación de exámenes orales en la universidad — coordinación de horarios simplificada.</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section id="values">
+      <div class="label">Valores</div>
+      <h2 class="section-title">Lo que guía mi trabajo</h2>
+      <p class="section-desc">Cuatro principios fundamentales que orientan mis decisiones técnicas y mi colaboración con los equipos.</p>
+      <div class="grid-2">
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="card-title">Producto</div>
+          <div class="card-desc">Alinear las soluciones técnicas con las necesidades del negocio, poniendo el valor entregado en el centro de cada decisión de arquitectura.</div>
+        </article>
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="card-title">Entrega</div>
+          <div class="card-desc">Ciclos cortos e iterativos con retroalimentación rápida. Mejora continua en lugar de perfeccionismo paralizante.</div>
+        </article>
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <div class="card-title">Arquitectura</div>
+          <div class="card-desc">Construir sistemas escalables y mantenibles con código probado, abstracciones claras y documentación útil.</div>
+        </article>
+
+        <article class="card value-card">
+          <div class="icon-box">
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="card-title">Rendimiento y costes</div>
+          <div class="card-desc">Conciencia del impacto económico de las decisiones técnicas. Optimización de costes en la nube y del rendimiento de las aplicaciones.</div>
+        </article>
 
       </div>
     </section>
@@ -353,7 +338,7 @@
           <div class="tl-title">Certificaciones Azure</div>
           <div class="tl-company">Microsoft</div>
           <div class="tl-desc">
-            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+            <div class="cert-list">
               <div class="cert-item"><span class="cert-badge">AZ-900</span><span class="cert-name">Azure Fundamentals</span></div>
               <div class="cert-item"><span class="cert-badge">AI-900</span><span class="cert-name">AI Fundamentals</span></div>
             </div>
@@ -390,7 +375,7 @@
 
         <a href="mailto:thomas@tlouvet.com" class="contact-link">
           <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
           <div>
             <div class="contact-label">Email</div>
@@ -400,7 +385,7 @@
 
         <a href="https://github.com/TLouvet" target="_blank" rel="noopener" class="contact-link">
           <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </div>
           <div>
             <div class="contact-label">GitHub</div>
@@ -410,7 +395,7 @@
 
         <a href="https://linkedin.com/in/tlouvet/" target="_blank" rel="noopener" class="contact-link">
           <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </div>
           <div>
             <div class="contact-label">LinkedIn</div>
@@ -420,7 +405,7 @@
 
         <a href="https://www.tlouvet.com" target="_blank" rel="noopener" class="contact-link">
           <div class="icon-box">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <svg aria-hidden="true" focusable="false" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
           <div>
             <div class="contact-label">Sitio web</div>

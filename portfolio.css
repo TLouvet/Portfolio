@@ -5,7 +5,7 @@
   --primary:     #4a3bca;
   --primary-10:  rgba(74, 59, 202, 0.10);
   --primary-20:  rgba(74, 59, 202, 0.20);
-  --muted-fg:    #7c7ca8;
+  --muted-fg:    #696990;
   --border:      #e3e3ef;
   --secondary:   #f0f0f8;
   --shadow-sm:   0 1px 2px rgba(0,0,0,.05);
@@ -240,6 +240,8 @@ section + section { border-top: 1px solid var(--border); }
   padding: 2px 8px;
 }
 
+.role-badge-wrapper { margin: 8px 0; }
+
 .project-title { font-size: 15px; font-weight: 600; color: var(--foreground); }
 
 .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; padding-top: 8px; }
@@ -293,29 +295,17 @@ section + section { border-top: 1px solid var(--border); }
 
 /* ── SKILLS ──────────────────────────────────────── */
 .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.skills-col  { display: flex; flex-direction: column; gap: 24px; }
+.skill-group { display: flex; flex-direction: column; gap: 8px; }
+.skill-tags  { display: flex; flex-wrap: wrap; gap: 6px; }
+
 .skill-group-label {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted-fg);
-  margin-bottom: 16px;
 }
-
-.skill-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.skill-row:last-child { border-bottom: none; }
-
-.skill-name  { font-size: 13px; font-weight: 500; }
-.skill-meta  { display: flex; align-items: center; gap: 8px; }
-.skill-years { font-size: 11px; font-weight: 600; color: var(--muted-fg); }
-.bar-track   { width: 64px; height: 3px; background: var(--border); }
-.bar-fill    { height: 100%; background: var(--primary); }
 
 /* ── CONTACT ─────────────────────────────────────── */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -368,6 +358,8 @@ footer {
 .footer-links a:hover { color: var(--foreground); }
 
 /* ── CERT ITEMS ──────────────────────────────────── */
+.cert-list { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+
 .cert-item {
   display: flex;
   align-items: center;
@@ -387,6 +379,17 @@ footer {
   color: var(--muted-fg);
 }
 .cert-name { font-size: 13px; font-weight: 500; color: var(--foreground); }
+
+/* ── JAPANESE PAGE ───────────────────────────────── */
+.footer-ja { flex-wrap: wrap; row-gap: 16px; }
+.footer-ja-note {
+  width: 100%;
+  font-size: 11px;
+  color: var(--muted-fg);
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
 
 /* ── MOBILE ──────────────────────────────────────── */
 @media (max-width: 768px) {
