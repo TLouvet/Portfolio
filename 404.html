@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Thomas Louvet</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portfolio.css">
+  <style>
+    .not-found {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 140px);
+      text-align: center;
+      gap: 20px;
+      padding: 40px 24px;
+    }
+    .not-found-code {
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -4px;
+    }
+    .not-found-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .not-found-desc {
+      font-size: 15px;
+      color: var(--muted-fg);
+      max-width: 380px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="header-logo">Thomas Louvet</a>
+    <nav></nav>
+    <div class="lang-switcher">
+      <a href="/" class="lang-option active">FR</a>
+      <span class="lang-sep">/</span>
+      <a href="/en/" class="lang-option">EN</a>
+      <span class="lang-sep">/</span>
+      <a href="/es/" class="lang-option">ES</a>
+      <span class="lang-sep">/</span>
+      <a href="/ja/" class="lang-option">JA</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="not-found">
+      <div class="not-found-code">404</div>
+      <div class="not-found-title">This page doesn't exist.</div>
+      <p class="not-found-desc">Unlike technical debt, I actually noticed.</p>
+      <a href="/" class="btn btn-primary">Back to home</a>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-copy">© 2026 Thomas Louvet.</span>
+    <div class="footer-links">
+      <a href="https://github.com/TLouvet" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/tlouvet/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:thomas@tlouvet.com">Email</a>
+    </div>
+  </footer>
+
+</body>
+</html>
