@@ -61,8 +61,19 @@ const PERF = (function () {
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   const small = window.innerWidth < 760;
   const mobile = coarse || small;            // phones/tablets: drop counts hard
-  const low = mobile || cores <= 4 || mem <= 4;
-  return { low, mobile, coarse, small };
+
+  // integrated/software GPUs (Intel HD/UHD/Iris, SwiftShader, llvmpipe…) are fill-rate
+  // limited and aren't caught by core/RAM checks — sniff the actual renderer string.
+  let weakGPU = false;
+  try {
+    const gl = document.createElement("canvas").getContext("webgl");
+    const ext = gl && gl.getExtension("WEBGL_debug_renderer_info");
+    const r = (ext && gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || "").toLowerCase();
+    weakGPU = !gl || /intel|hd graphics|uhd graphics|iris|swiftshader|llvmpipe|microsoft basic|softpipe|mesa/.test(r);
+  } catch (e) { /* renderer info blocked — rely on the FPS guard */ }
+
+  const low = mobile || weakGPU || cores <= 4 || mem <= 4;
+  return { low, mobile, weakGPU, coarse, small };
 })();
 let maxDPR = PERF.low ? 1 : 1.75; // FPS guard may lower this further
 
@@ -184,8 +195,9 @@ function buildField() {
   const points = new THREE.Points(geo, mat);
   scene.add(points);
 
-  // `draw` = how many particles are currently simulated/rendered (FPS guard may shrink it)
-  field = { points, pos, home, vel, count: COUNT, draw: COUNT };
+  // `draw` = how many particles are simulated/rendered (FPS guard may shrink it).
+  // `interleave` = update only half the particles each frame (imperceptible, ~halves CPU).
+  field = { points, pos, home, vel, count: COUNT, draw: COUNT, interleave: PERF.low };
 }
 
 // generate a soft radial dot sprite on a canvas
@@ -205,20 +217,26 @@ function makeDotTexture() {
   return tex;
 }
 
-// per-frame particle physics: repel from cursor, spring home, damp
-function updateField(dt) {
+// per-frame particle physics: repel from cursor, spring home, damp.
+// When interleaving, only half the particles update each frame (start/step),
+// and each gets a doubled effective dt so the motion looks identical.
+function updateField(dt, parity) {
   if (!field) return;
   const { pos, home, vel, draw } = field;
+
+  const step = field.interleave ? 2 : 1;
+  const start = field.interleave ? parity : 0;
+  const edt = dt * step; // effective timestep for the particles updated this frame
 
   // tuning
   const radius = pointerActive ? (pointerDown ? 14 : 9) : 0; // influence radius
   const r2 = radius * radius;
   const force = pointerDown ? 130 : 70;                       // push strength
   const spring = 3.2;                                         // pull back to home
-  const damp = Math.exp(-4.2 * dt);                           // velocity decay
+  const damp = Math.exp(-4.2 * edt);                          // velocity decay
   const mx = mouseWorld.x, my = mouseWorld.y;
 
-  for (let i = 0; i < draw; i++) {
+  for (let i = start; i < draw; i += step) {
     const ix = i * 3, iy = ix + 1, iz = ix + 2;
     let px = pos[ix], py = pos[iy], pz = pos[iz];
 
@@ -229,24 +247,24 @@ function updateField(dt) {
       if (d2 < r2 && d2 > 0.0001) {
         const d = Math.sqrt(d2);
         const f = (1 - d / radius) * force; // stronger when closer
-        vel[ix] += (dx / d) * f * dt;
-        vel[iy] += (dy / d) * f * dt;
-        vel[iz] += (Math.random() - 0.5) * f * 0.4 * dt; // pop in z
+        vel[ix] += (dx / d) * f * edt;
+        vel[iy] += (dy / d) * f * edt;
+        vel[iz] += (Math.random() - 0.5) * f * 0.4 * edt; // pop in z
       }
     }
 
     // --- spring back home ---
-    vel[ix] += (home[ix] - px) * spring * dt;
-    vel[iy] += (home[iy] - py) * spring * dt;
-    vel[iz] += (home[iz] - pz) * spring * dt;
+    vel[ix] += (home[ix] - px) * spring * edt;
+    vel[iy] += (home[iy] - py) * spring * edt;
+    vel[iz] += (home[iz] - pz) * spring * edt;
 
     // --- damping ---
     vel[ix] *= damp; vel[iy] *= damp; vel[iz] *= damp;
 
     // --- integrate ---
-    pos[ix] = px + vel[ix] * dt;
-    pos[iy] = py + vel[iy] * dt;
-    pos[iz] = pz + vel[iz] * dt;
+    pos[ix] = px + vel[ix] * edt;
+    pos[iy] = py + vel[iy] * edt;
+    pos[iz] = pz + vel[iz] * edt;
   }
 
   field.points.geometry.attributes.position.needsUpdate = true;
@@ -549,7 +567,7 @@ function projectMouse() {
   raycaster.ray.intersectPlane(dragPlane, mouseWorld);
 }
 
-let _fpsAccum = 0, _fpsFrames = 0;
+let _fpsAccum = 0, _fpsFrames = 0, _parity = 0;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -567,8 +585,9 @@ function animate() {
   if (_fpsAccum >= 2) {
     const fps = _fpsFrames / _fpsAccum;
     if (fps < 45) {
-      if (maxDPR > 1) { maxDPR = 1; renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); }
-      if (field && field.draw > field.count * 0.25) {
+      if (field && !field.interleave) field.interleave = true;          // cheapest step first
+      else if (maxDPR > 1) { maxDPR = 1; renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); }
+      else if (field && field.draw > field.count * 0.25) {              // then thin the field
         field.draw = Math.max(Math.floor(field.count * 0.25), Math.floor(field.draw * 0.6));
         field.points.geometry.setDrawRange(0, field.draw);
       }
@@ -581,8 +600,9 @@ function animate() {
   mouse.y += (mouse.ty - mouse.y) * 0.05;
 
   // interactive particle field reacts to the cursor
+  _parity ^= 1; // alternate which half of the field updates this frame
   projectMouse();
-  updateField(dt);
+  updateField(dt, _parity);
 
   // sun breathing + comets
   if (sun) {
