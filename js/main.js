@@ -505,26 +505,29 @@ document.addEventListener("DOMContentLoaded", () => {
     // scripted event
     if (kind === "supernova") {
       const core = mk("dive-core");
-      const shards = makeShards(22);
+      const shards = makeShards(lowPerf ? 8 : 22);
       tl.fromTo(core, { scale: 0, opacity: 0 }, { scale: 7, opacity: 1, ease: "power1.in", duration: 1.3 }, 1.1); // swell
       tl.to(core, { scale: 0.15, ease: "power3.in", duration: 0.45 });                                            // implode
       tl.set(core, { opacity: 0 });
       detonate(tl, shards, ">-0.05");                                                                              // detonate
     } else if (kind === "wormhole") {
       const lineX = () => { const t = document.querySelector(".timeline"); return t ? t.getBoundingClientRect().left : innerWidth * 0.1; };
-      // swirling vortex throat behind everything (gentle, slow)
-      const vortex = mk("dive-vortex");
-      tl.fromTo(vortex, { opacity: 0, scale: 0.3, rotation: 0 },
-                        { opacity: 0.7, scale: 1, rotation: 150, ease: "power1.inOut", duration: 2.6 }, 0.2);
-      tl.to(vortex, { rotation: 240, scale: 1.4, opacity: 0, ease: "power1.inOut", duration: 1.2 }, ">-0.3");
+      // the screen-sized mix-blend vortex is the heaviest thing to composite — skip it on low-end
+      if (!lowPerf) {
+        const vortex = mk("dive-vortex");
+        tl.fromTo(vortex, { opacity: 0, scale: 0.3, rotation: 0 },
+                          { opacity: 0.7, scale: 1, rotation: 150, ease: "power1.inOut", duration: 2.6 }, 0.2);
+        tl.to(vortex, { rotation: 240, scale: 1.4, opacity: 0, ease: "power1.inOut", duration: 1.2 }, ">-0.3");
+      }
 
-      // calmer ring tunnel: fewer rings, softer glow, slower, two cool hues only
+      // calmer ring tunnel (fewer rings + no glow on low-end)
       const palette = ["#00f0ff", "#b14bff"];
       const rings = [];
-      for (let i = 0; i < 7; i++) {
+      const RING_COUNT = lowPerf ? 3 : 7;
+      for (let i = 0; i < RING_COUNT; i++) {
         const r = mk("dive-portal-ring");
         r.style.borderColor = palette[i % palette.length];
-        r.style.boxShadow = `0 0 16px ${palette[i % palette.length]}`;
+        if (!lowPerf) r.style.boxShadow = `0 0 16px ${palette[i % palette.length]}`;
         rings.push(r);
       }
       tl.fromTo(rings,
@@ -549,7 +552,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const ufo = stage.querySelector(".dive-ufo");
       // hyperspace star streaks bursting radially from the centre
       const streaks = [];
-      for (let i = 0; i < 64; i++) {
+      const STREAKS = lowPerf ? 22 : 64;
+      for (let i = 0; i < STREAKS; i++) {
         const s = mk("ls-streak");
         gsap.set(s, { rotation: Math.random() * 360, transformOrigin: "0% 50%", scaleX: 0, opacity: 0 });
         streaks.push(s);

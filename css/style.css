@@ -65,6 +65,12 @@ main { position: relative; z-index: 2; }
 .low-perf #cursor-light { display: none; }           /* full-screen plus-lighter spotlight */
 .low-perf .ufo-craft { animation: none; }
 .low-perf .marquee { box-shadow: none; }
+/* dives: drop the expensive blend/blur/glow during the heaviest transitions */
+.low-perf .dive-vortex { display: none !important; }              /* screen-blend conic gradient */
+.low-perf .flight-rocket, .low-perf .dive-ufo { filter: none; }   /* drop-shadow on a huge scaled element */
+.low-perf .dive-flash { filter: none; }
+.low-perf .dive-portal-ring { box-shadow: none !important; }
+.low-perf .dive-ring { box-shadow: 0 0 12px var(--accent); }
 
 /* ===== READABILITY SCRIM =====
    Dims the busy 3D background (sun glare, particles) so text stays legible.
