@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thomas Louvet — Lead Full-Stack Developer &amp; Software Architect</title>
+  <meta name="description" content="Thomas Louvet — Lead Full-Stack Developer & Software Architect. I turn complex business requirements into clean, durable software." />
+  <meta name="author" content="Thomas Louvet" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Thomas Louvet — Lead Full-Stack Developer & Software Architect" />
+  <meta property="og:description" content="I turn complex business requirements into clean, durable software." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tlouvet.com" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <!-- Three.js via import map (CDN, no build step — GitHub Pages friendly) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- GSAP + ScrollTrigger + plugins (CDN) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+</head>
+<body class="intro-active">
+
+  <!-- ===== PRELOADER ===== -->
+  <div id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-glitch" data-text="TLOUVET">TLOUVET</div>
+      <div class="preloader-bar"><span id="preloader-progress"></span></div>
+      <div class="preloader-percent"><span id="preloader-count">0</span>%</div>
+      <div class="preloader-status" id="preloader-status">booting kernel…</div>
+    </div>
+  </div>
+
+  <!-- ===== SPACE INTRO GATE ===== -->
+  <div id="space-intro" class="space-intro">
+    <div class="si-inner">
+      <div class="si-kicker">[ entry sequence ]</div>
+      <h2 class="si-title">ENTER THE VOID</h2>
+      <p class="si-sub">a journey through infinite space</p>
+      <div class="si-meter"><span id="si-fill"></span></div>
+      <button class="si-skip" id="si-skip" data-cursor="hover">▶ click here to start the trip</button>
+    </div>
+  </div>
+
+  <!-- ===== CUSTOM CURSOR ===== -->
+  <div class="cursor-light" id="cursor-light"></div>
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- ===== SCROLL PROGRESS ===== -->
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- ===== AUDIO ===== -->
+  <audio id="bg-audio" src="./public/soundmusic.mp3" loop preload="auto"></audio>
+  <button id="sound-toggle" class="sound-toggle" aria-label="toggle sound" data-cursor="hover">
+    <span class="eq"><i></i><i></i><i></i><i></i></span>
+    <span class="sound-label">sound on</span>
+  </button>
+
+  <!-- ===== NOISE / GRAIN OVERLAY ===== -->
+  <div class="grain"></div>
+
+  <!-- ===== INTERSTITIAL STAGES (fixed overlays) ===== -->
+  <div id="stage-skills" class="dive-stage" aria-hidden="true">
+    <div class="dive-dark"></div>
+    <div class="dive-title">SKILLS</div>
+  </div>
+  <div id="dive-stage" class="dive-stage" aria-hidden="true">
+    <div class="dive-dark"></div>
+    <div class="dive-meteor dive-meteor-a"></div>
+    <div class="dive-meteor dive-meteor-b"></div>
+    <div class="dive-shards"></div>
+    <div class="dive-ring"></div>
+    <div class="dive-flash"></div>
+    <div class="dive-title">EXPERIENCE</div>
+  </div>
+  <div id="stage-projects" class="dive-stage" aria-hidden="true">
+    <div class="dive-dark"></div>
+    <div class="dive-title">PROJECTS</div>
+  </div>
+
+  <!-- single persistent rocket: rides Experience, then flies into the Projects wormhole -->
+  <div id="flight-rocket" class="flight-rocket" aria-hidden="true">🚀</div>
+
+  <div id="stage-contact" class="dive-stage" aria-hidden="true">
+    <div class="dive-dark"></div>
+    <div class="dive-ufo" aria-hidden="true">🛸</div>
+    <div class="dive-title">CONTACT</div>
+  </div>
+
+  <!-- ===== THREE.JS BACKGROUND CANVAS ===== -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ===== READABILITY SCRIM (sits between canvas and content) ===== -->
+  <div class="readability-scrim" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo magnetic" data-cursor="hover">TL<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about" data-cursor="hover">/about</a></li>
+      <li><a href="#skills" data-cursor="hover">/skills</a></li>
+      <li><a href="#experience" data-cursor="hover">/work</a></li>
+      <li><a href="#projects" data-cursor="hover">/projects</a></li>
+      <li><a href="#contact" data-cursor="hover">/contact</a></li>
+    </ul>
+    <button class="nav-burger" id="nav-burger" aria-label="menu"><span></span><span></span></button>
+  </nav>
+
+  <main data-scroll-container>
+
+    <!-- ===== HERO ===== -->
+    <section id="hero" class="section hero">
+      <div class="hero-bg-text" aria-hidden="true">DEVELOPER · ARCHITECT · DEVELOPER · ARCHITECT ·</div>
+      <div class="hero-content">
+        <p class="hero-eyebrow reveal-up">// Lead Full-Stack Developer &amp; Software Architect</p>
+        <h1 class="hero-title">
+          <span class="line"><span class="word glitch" data-text="THOMAS">THOMAS</span></span>
+          <span class="line"><span class="word outline">LOUVET</span></span>
+        </h1>
+        <p class="hero-sub reveal-up">
+          <span id="typed-line"></span><span class="caret">_</span>
+        </p>
+        <div class="hero-cta reveal-up">
+          <a href="#projects" class="btn btn-primary magnetic" data-cursor="hover"><span>See the work</span></a>
+          <a href="#contact" class="btn btn-ghost magnetic" data-cursor="hover"><span>Get in touch</span></a>
+        </div>
+      </div>
+      <div class="scroll-hint reveal-up">
+        <span>scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ===== MARQUEE / GALACTIC NEWS TICKER ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-badge"><span class="mq-live"></span>Galactic News</div>
+      <div class="marquee-track">
+        <div class="mq-set">
+          <b class="mq-item">TypeScript</b><i class="mq-sep">✦</i>
+          <b class="mq-item">React</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Node.js</b><i class="mq-sep">✦</i>
+          <b class="mq-item">NestJS</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Angular</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Azure</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Docker</b><i class="mq-sep">✦</i>
+          <b class="mq-item">PostgreSQL</b><i class="mq-sep">✦</i>
+          <b class="mq-item">MongoDB</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Domain-Driven Design</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Hexagonal Architecture</b><i class="mq-sep">✦</i>
+        </div>
+        <div class="mq-set">
+          <b class="mq-item">TypeScript</b><i class="mq-sep">✦</i>
+          <b class="mq-item">React</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Node.js</b><i class="mq-sep">✦</i>
+          <b class="mq-item">NestJS</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Angular</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Azure</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Docker</b><i class="mq-sep">✦</i>
+          <b class="mq-item">PostgreSQL</b><i class="mq-sep">✦</i>
+          <b class="mq-item">MongoDB</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Domain-Driven Design</b><i class="mq-sep">✦</i>
+          <b class="mq-item">Hexagonal Architecture</b><i class="mq-sep">✦</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="section about">
+      <div class="section-head">
+        <span class="section-index">01</span>
+        <h2 class="section-title glitch" data-split data-text="About">About</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="about-lead" data-words>I transform complex business requirements into clean, durable software.</p>
+          <p class="about-p reveal-up">I'm a Lead Full-Stack Developer &amp; Software Architect who lives where the domain meets the code. Over 20 web projects I've led teams, shaped architecture, and shipped applications built to endure — not just to demo.</p>
+          <p class="about-p reveal-up">Domain-Driven Design, Hexagonal Architecture and a relentless testing discipline are my default toolkit. When I'm not building, I'm teaching the next wave of developers at the IUT de Montreuil.</p>
+          <div class="about-stats">
+            <div class="stat" data-stat><span class="stat-top"><span class="stat-num" data-count="20">0</span></span><span class="stat-label">web projects shipped</span><span class="stat-bar"></span></div>
+            <div class="stat" data-stat><span class="stat-top"><span class="stat-num" data-count="3">0</span></span><span class="stat-label">flagship projects led</span><span class="stat-bar"></span></div>
+            <div class="stat" data-stat><span class="stat-top"><span class="stat-num" data-count="100">0</span><span class="stat-plus">+</span></span><span class="stat-label">students taught</span><span class="stat-bar"></span></div>
+            <div class="stat" data-stat><span class="stat-top"><span class="stat-num" data-count="5">0</span></span><span class="stat-label">years &amp; counting</span><span class="stat-bar"></span></div>
+          </div>
+        </div>
+        <div class="about-card" id="tilt-card">
+          <div class="about-card-inner">
+            <div class="about-card-scan" aria-hidden="true"></div>
+            <div class="about-card-badge" aria-hidden="true">&lt;/&gt;</div>
+            <div class="about-card-line"><span>name</span><b>Thomas Louvet</b></div>
+            <div class="about-card-line"><span>role</span><b>Lead Full-Stack Dev</b></div>
+            <div class="about-card-line"><span>focus</span><b>Architecture · DDD</b></div>
+            <div class="about-card-line"><span>base</span><b>France 🇫🇷</b></div>
+            <div class="about-card-line"><span>status</span><b class="status-dot">open to talk</b></div>
+            <div class="about-card-glow"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DIVE INTERSTITIAL -> SKILLS ===== -->
+    <section id="dive-skills" class="dive" aria-hidden="true"></section>
+
+    <!-- ===== SKILLS ===== -->
+    <section id="skills" class="section skills">
+      <div class="section-head">
+        <span class="section-index">02</span>
+        <h2 class="section-title glitch" data-split data-text="Skills">Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-cluster reveal-up">
+          <h3>Languages &amp; Frameworks</h3>
+          <ul class="chips">
+            <li data-cursor="hover">TypeScript</li><li data-cursor="hover">React</li><li data-cursor="hover">Node.js</li>
+            <li data-cursor="hover">NestJS</li><li data-cursor="hover">Angular</li><li data-cursor="hover">HTML/CSS</li>
+          </ul>
+        </div>
+        <div class="skill-cluster reveal-up">
+          <h3>Databases</h3>
+          <ul class="chips">
+            <li data-cursor="hover">MySQL</li><li data-cursor="hover">PostgreSQL</li><li data-cursor="hover">MongoDB</li>
+          </ul>
+        </div>
+        <div class="skill-cluster reveal-up">
+          <h3>Architecture</h3>
+          <ul class="chips">
+            <li data-cursor="hover">Domain-Driven Design</li><li data-cursor="hover">Hexagonal Architecture</li><li data-cursor="hover">Azure Solutions</li>
+          </ul>
+        </div>
+        <div class="skill-cluster reveal-up">
+          <h3>Cloud &amp; DevOps</h3>
+          <ul class="chips">
+            <li data-cursor="hover">Azure</li><li data-cursor="hover">Azure Pipelines</li><li data-cursor="hover">Docker</li>
+            <li data-cursor="hover">Azure DevOps</li><li data-cursor="hover">Git</li>
+          </ul>
+        </div>
+        <div class="skill-cluster reveal-up">
+          <h3>Practices</h3>
+          <ul class="chips">
+            <li data-cursor="hover">REST API Design</li><li data-cursor="hover">Testing Strategy</li><li data-cursor="hover">Quality Assurance</li>
+          </ul>
+        </div>
+        <div class="skill-cluster reveal-up">
+          <h3>Certifications</h3>
+          <ul class="chips">
+            <li data-cursor="hover">AZ-900</li><li data-cursor="hover">AI-900</li><li data-cursor="hover">RNCP Lvl 7</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DIVE INTERSTITIAL (scroll spacer drives the cinematic) ===== -->
+    <section id="dive" class="dive" aria-hidden="true"></section>
+
+    <!-- ===== EXPERIENCE ===== -->
+    <section id="experience" class="section experience">
+      <div class="section-head">
+        <span class="section-index">03</span>
+        <h2 class="section-title glitch" data-split data-text="Experience">Experience</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-beam" aria-hidden="true"></div>
+        <div class="tl-item reveal-up">
+          <div class="tl-dot"></div>
+          <div class="tl-when">Nov 2021 — Present</div>
+          <div class="tl-body">
+            <h3>Lead Full-Stack Developer</h3>
+            <span class="tl-org">Akkodis</span>
+            <p>Delivered 20 web projects and acted as technical lead on 3 flagship initiatives — owning architecture, code quality and team direction end to end.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal-up">
+          <div class="tl-dot"></div>
+          <div class="tl-when">Sep 2024 — Present</div>
+          <div class="tl-body">
+            <h3>Teaching Instructor</h3>
+            <span class="tl-org">IUT de Montreuil</span>
+            <p>Teaching web development to 40+ students per semester — bridging real-world engineering practice and the classroom.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal-up">
+          <div class="tl-dot"></div>
+          <div class="tl-when">2016 — 2021</div>
+          <div class="tl-body">
+            <h3>Reception Manager</h3>
+            <span class="tl-org">Accor Hotels</span>
+            <p>Team leadership and operations management — where I learned to lead people before I led codebases.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal-up">
+          <div class="tl-dot"></div>
+          <div class="tl-when">2021 — 2024</div>
+          <div class="tl-body">
+            <h3>Expert in Software Engineering — RNCP Lvl 7</h3>
+            <span class="tl-org">OpenClassrooms</span>
+            <p>Formal software engineering expertise, plus Azure AZ-900 &amp; AI-900 certifications (2025).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DIVE INTERSTITIAL -> PROJECTS ===== -->
+    <section id="dive-projects" class="dive" aria-hidden="true"></section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects" class="section projects">
+      <div class="ufo" id="ufo" aria-hidden="true">
+        <span class="ufo-craft">🛸</span>
+        <span class="ufo-label">scanning…</span>
+        <span class="ufo-beam"></span>
+      </div>
+      <div class="section-head">
+        <span class="section-index">04</span>
+        <h2 class="section-title glitch" data-split data-text="Projects">Projects</h2>
+      </div>
+
+      <h3 class="projects-subhead reveal-up">Professional</h3>
+      <div class="project-list">
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P01</span><span class="project-period">Nov 2021 — Present</span></div>
+          <h4>Agricultural Data Platform</h4>
+          <p>A data platform for the agricultural sector — ingestion, visualization and decision support at scale.</p>
+          <div class="project-stack"><span>React</span><span>NestJS</span><span>MongoDB</span><span>Azure</span></div>
+        </article>
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P02</span><span class="project-period">Jun 2025 — Present</span></div>
+          <h4>AI-Assisted Commercial Offers</h4>
+          <p>RAG-powered generative-AI workflows that draft and refine commercial offers — humans in the loop, AI in the engine.</p>
+          <div class="project-stack"><span>RAG</span><span>Generative AI</span><span>Node.js</span></div>
+        </article>
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P03</span><span class="project-period">Nov 2024 — Present</span></div>
+          <h4>B2B Order Management</h4>
+          <p>A full B2B order-management system built from scratch — domain modeled, architecture owned, shipped to production.</p>
+          <div class="project-stack"><span>React</span><span>NestJS</span><span>MySQL</span></div>
+        </article>
+      </div>
+
+      <h3 class="projects-subhead reveal-up">Personal &amp; Open Source</h3>
+      <div class="project-list">
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P04</span><span class="project-period">Algorithms</span></div>
+          <h4>Path Visualizer</h4>
+          <p>Interactive visualization of pathfinding — DFS, BFS, Dijkstra &amp; A* come alive on a grid.</p>
+          <div class="project-stack"><span>TypeScript</span><span>React</span><span>Canvas</span></div>
+        </article>
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P05</span><span class="project-period">Knowledge graph</span></div>
+          <h4>Relagraph</h4>
+          <p>Collaborative note-taking organized as a living graph — ideas connected, not filed away.</p>
+          <div class="project-stack"><span>TypeScript</span><span>React</span><span>Graphs</span></div>
+        </article>
+        <article class="project reveal-up" data-cursor="hover">
+          <div class="project-meta"><span class="project-no">P06</span><span class="project-period">Tooling</span></div>
+          <h4>Schedule Finder</h4>
+          <p>An oral-exam planning tool built for the IUT — turning a scheduling nightmare into one click.</p>
+          <div class="project-stack"><span>TypeScript</span><span>React</span><span>Node.js</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== LIGHTSPEED INTERSTITIAL -> CONTACT ===== -->
+    <section id="dive-contact" class="dive" aria-hidden="true"></section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="section contact">
+      <div class="section-head">
+        <span class="section-index">05</span>
+        <h2 class="section-title glitch" data-split data-text="Contact">Contact</h2>
+      </div>
+      <div class="contact-inner">
+        <h3 class="contact-big" data-split>Let's build something.<br/>It's not rocket science.</h3>
+        <a class="contact-mail magnetic" href="mailto:thomas@tlouvet.com" data-cursor="hover">thomas@tlouvet.com</a>
+        <div class="contact-socials">
+          <a href="https://github.com/TLouvet" target="_blank" rel="noopener" class="magnetic" data-cursor="hover">GitHub</a>
+          <a href="https://linkedin.com/in/tlouvet/" target="_blank" rel="noopener" class="magnetic" data-cursor="hover">LinkedIn</a>
+          <a href="https://tlouvet.com" target="_blank" rel="noopener" class="magnetic" data-cursor="hover">tlouvet.com</a>
+        </div>
+      </div>
+      <footer class="footer">
+        <span>© <span id="year"></span> Thomas Louvet</span>
+        <span>Built with Three.js · GSAP · too much caffeine ☕</span>
+      </footer>
+    </section>
+
+  </main>
+
+  <script type="module" src="./js/scene.js"></script>
+  <script defer src="./js/main.js"></script>
+</body>
+</html>

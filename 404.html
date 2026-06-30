@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Lost in space · Thomas Louvet</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #05060a; --fg: #e8ecf4; --muted: #8b93a7;
+      --accent: #00f0ff; --accent-2: #ff2bd6; --accent-3: #b14bff;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --mono: "JetBrains Mono", monospace; --display: "Orbitron", sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background: radial-gradient(ellipse at 50% 30%, #0a0c18 0%, #05060a 60%, #010103 100%);
+      color: var(--fg); font-family: var(--mono); overflow: hidden;
+      display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem;
+    }
+    /* starfield */
+    .stars, .stars::after { position: fixed; inset: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1.5px 1.5px at 20% 30%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 75% 20%, var(--accent), transparent),
+        radial-gradient(1px 1px at 40% 70%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 85% 65%, var(--accent-2), transparent),
+        radial-gradient(1px 1px at 60% 45%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 12% 80%, var(--accent-3), transparent),
+        radial-gradient(1px 1px at 90% 90%, #fff, transparent);
+      background-repeat: repeat; background-size: 100% 100%; opacity: .8; }
+    .stars::after { content: ""; background-size: 70% 70%; opacity: .4; animation: drift 60s linear infinite; }
+    @keyframes drift { to { transform: translateY(-40px); } }
+
+    .wrap { position: relative; z-index: 2; max-width: 640px; }
+    .planet { font-size: clamp(3rem, 12vw, 6rem); display: inline-block; animation: float 5s ease-in-out infinite; filter: drop-shadow(0 0 18px var(--accent)); }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-14px) rotate(6deg); } }
+
+    .code { position: relative; font-family: var(--display); font-weight: 900; font-size: clamp(5rem, 26vw, 13rem); line-height: 1;
+      letter-spacing: .04em; margin: .4rem 0 .2rem; background: linear-gradient(180deg, var(--fg), var(--accent)); -webkit-background-clip: text;
+      background-clip: text; -webkit-text-fill-color: transparent; }
+    .code::before, .code::after { content: "404"; position: absolute; inset: 0; -webkit-text-fill-color: initial; }
+    .code::before { color: var(--accent); animation: gA 2.6s infinite linear alternate; opacity: .85; mix-blend-mode: screen; }
+    .code::after { color: var(--accent-2); animation: gB 2s infinite linear alternate; opacity: .85; mix-blend-mode: screen; }
+    @keyframes gA { 0%{clip-path:inset(0 0 80% 0);transform:translate(-3px,-1px)} 50%{clip-path:inset(50% 0 30% 0);transform:translate(3px,1px)} 100%{clip-path:inset(80% 0 0 0);transform:translate(-1px,1px)} }
+    @keyframes gB { 0%{clip-path:inset(70% 0 10% 0);transform:translate(3px,1px)} 50%{clip-path:inset(20% 0 60% 0);transform:translate(-3px,-1px)} 100%{clip-path:inset(0 0 75% 0);transform:translate(1px,-1px)} }
+
+    h1 { font-family: var(--display); font-weight: 800; font-size: clamp(1.1rem, 4vw, 1.8rem); letter-spacing: .15em; text-transform: uppercase; margin-bottom: .9rem; }
+    p { color: var(--muted); font-size: clamp(.85rem, 2.4vw, 1rem); line-height: 1.6; margin-bottom: 2rem; }
+    p .accent { color: var(--accent); }
+
+    .btn { position: relative; display: inline-flex; align-items: center; gap: .6rem; padding: .95rem 2rem; border-radius: 50px;
+      font-family: var(--mono); font-size: .9rem; letter-spacing: .05em; color: #05060a; text-decoration: none;
+      background: linear-gradient(90deg, var(--accent), var(--accent-3)); transition: transform .3s var(--ease), box-shadow .3s;
+      box-shadow: 0 0 0 rgba(0,240,255,.5); animation: pulse 2.4s ease-in-out infinite; }
+    .btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 0 34px rgba(0,240,255,.55); }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 rgba(0,240,255,0); } 50% { box-shadow: 0 0 26px rgba(0,240,255,.5); } }
+
+    .countdown { margin-top: 1.4rem; font-size: .75rem; color: var(--muted); letter-spacing: .1em; }
+    .countdown b { color: var(--accent); }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <main class="wrap">
+    <div class="planet">🪐</div>
+    <div class="code" data-text="404">404</div>
+    <h1>Signal Lost</h1>
+    <p>You drifted off the star map — this coordinate doesn't exist in <span class="accent">Thomas Louvet's</span> known universe.</p>
+    <a class="btn" href="/">↩ Return to base</a>
+    <div class="countdown" id="cd">auto-warping home in <b><span id="n">10</span></b>s…</div>
+  </main>
+  <script>
+    (function () {
+      var n = 10, el = document.getElementById("n"), cd = document.getElementById("cd");
+      var t = setInterval(function () {
+        n -= 1;
+        if (el) el.textContent = n;
+        if (n <= 0) { clearInterval(t); if (cd) cd.textContent = "warping…"; window.location.href = "/"; }
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
