@@ -30,6 +30,7 @@ let cursorLight; // point light that tracks the cursor in 3D
 let sun, sunGlow, sunCorona, sunGroup; // glowing sun (reused as the landing star)
 let landingSystem; // the new solar system you land on at Contact (planets/rings)
 const landingPlanets = [];
+let darkEls = []; // dive overlays — when one is opaque, the 3D render is skipped
 const SUN_HOME = new THREE.Vector3(-34, 20, -45); // the sun's resting corner spot
 const _center = new THREE.Vector3();
 const comets = []; // shooting stars / meteorites
@@ -97,6 +98,8 @@ function init() {
   buildLanding();
   buildCore();
   buildLights();
+
+  darkEls = Array.prototype.slice.call(document.querySelectorAll(".dive-dark"));
 
   window.addEventListener("resize", onResize);
   window.addEventListener("pointermove", onMove);
@@ -579,6 +582,12 @@ function animate() {
   const dt = Math.min(clock.getDelta(), 0.05); // clamp to avoid blow-ups on tab refocus
   const t = clock.elapsedTime;
   const sp = reduceMotion ? 0.15 : 1;
+
+  // skip the whole 3D frame while a dive overlay fully covers the scene — you can't
+  // see it anyway, so don't pay for the render/physics behind it.
+  for (let i = 0; i < darkEls.length; i++) {
+    if ((+darkEls[i].style.opacity || 0) > 0.9) return;
+  }
 
   // ---- adaptive FPS guard: keep shedding load (step by step) until it's smooth ----
   _fpsAccum += dt; _fpsFrames++;
