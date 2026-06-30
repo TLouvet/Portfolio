@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- tag low-end devices BEFORE first paint so heavy CSS effects are skipped -->
+  <script>
+    (function () {
+      try {
+        var cores = navigator.hardwareConcurrency || 8;
+        var mem = navigator.deviceMemory || 8;
+        var coarse = matchMedia("(pointer: coarse)").matches;
+        var small = innerWidth < 760;
+        if (coarse || small || cores <= 4 || mem <= 4) document.documentElement.classList.add("low-perf");
+      } catch (e) {}
+    })();
+  </script>
   <title>Thomas Louvet — Lead Full-Stack Developer &amp; Software Architect</title>
   <meta name="description" content="Thomas Louvet — Lead Full-Stack Developer & Software Architect. I turn complex business requirements into clean, durable software." />
   <meta name="author" content="Thomas Louvet" />

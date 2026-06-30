@@ -54,9 +54,20 @@ const COLORS = {
   green: new THREE.Color(0x5cff9d),
 };
 
+// performance tier — drives particle counts, pixel ratio and antialiasing
+const PERF = (function () {
+  const cores = navigator.hardwareConcurrency || 8;
+  const mem = navigator.deviceMemory || 8;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const small = window.innerWidth < 760;
+  const low = coarse || small || cores <= 4 || mem <= 4;
+  return { low, coarse, small };
+})();
+let maxDPR = PERF.low ? 1 : 1.75; // FPS guard may lower this further
+
 function init() {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: !PERF.low, alpha: true, powerPreference: "high-performance" });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDPR));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   scene = new THREE.Scene();
@@ -88,7 +99,7 @@ function init() {
 
 // ---- drifting starfield ----
 function buildStarfield() {
-  const count = 1400;
+  const count = PERF.low ? 600 : 1400;
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
@@ -115,7 +126,7 @@ function buildStarfield() {
 
 // ---- closer "nebula" of cyan dust ----
 function buildNebula() {
-  const count = 600;
+  const count = PERF.low ? 250 : 600;
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
@@ -135,9 +146,8 @@ function buildNebula() {
 // projected into the same plane and shoves nearby particles outward;
 // each particle springs back to its home with damping. Click = shockwave.
 function buildField() {
-  // scale particle budget to device — desktop gets the heavy version
-  const isMobile = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 760;
-  const COUNT = isMobile ? 6000 : 16000;
+  // scale particle budget to the performance tier
+  const COUNT = PERF.low ? (PERF.small ? 2500 : 5000) : 16000;
 
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(COUNT * 3);
@@ -173,7 +183,8 @@ function buildField() {
   const points = new THREE.Points(geo, mat);
   scene.add(points);
 
-  field = { points, pos, home, vel, count: COUNT };
+  // `draw` = how many particles are currently simulated/rendered (FPS guard may shrink it)
+  field = { points, pos, home, vel, count: COUNT, draw: COUNT };
 }
 
 // generate a soft radial dot sprite on a canvas
@@ -196,7 +207,7 @@ function makeDotTexture() {
 // per-frame particle physics: repel from cursor, spring home, damp
 function updateField(dt) {
   if (!field) return;
-  const { pos, home, vel, count } = field;
+  const { pos, home, vel, draw } = field;
 
   // tuning
   const radius = pointerActive ? (pointerDown ? 14 : 9) : 0; // influence radius
@@ -206,7 +217,7 @@ function updateField(dt) {
   const damp = Math.exp(-4.2 * dt);                           // velocity decay
   const mx = mouseWorld.x, my = mouseWorld.y;
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < draw; i++) {
     const ix = i * 3, iy = ix + 1, iz = ix + 2;
     let px = pos[ix], py = pos[iy], pz = pos[iz];
 
@@ -294,7 +305,7 @@ function makeGlowTexture(stops) {
 function buildComets() {
   const tailTex = makeCometTailTexture();
   const headTex = makeGlowTexture(["rgba(255,255,255,1)", "rgba(120,230,255,0.8)", "rgba(80,120,255,0)"]);
-  const COUNT = 10;
+  const COUNT = PERF.low ? 5 : 10;
 
   for (let i = 0; i < COUNT; i++) {
     const group = new THREE.Group();
@@ -537,13 +548,31 @@ function projectMouse() {
   raycaster.ray.intersectPlane(dragPlane, mouseWorld);
 }
 
+let _fpsAccum = 0, _fpsFrames = 0, _downgraded = false;
+
 function animate() {
   requestAnimationFrame(animate);
+  // pause all work while the tab is hidden (saves CPU/GPU/battery)
+  if (document.hidden) return;
+
   // getDelta() advances the clock; read elapsedTime after (calling
   // getElapsedTime() too would double-advance and zero out dt).
   const dt = Math.min(clock.getDelta(), 0.05); // clamp to avoid blow-ups on tab refocus
   const t = clock.elapsedTime;
   const sp = reduceMotion ? 0.15 : 1;
+
+  // ---- adaptive FPS guard: if it's still struggling, downgrade once ----
+  _fpsAccum += dt; _fpsFrames++;
+  if (_fpsAccum >= 2) {
+    const fps = _fpsFrames / _fpsAccum;
+    if (!_downgraded && fps < 45) {
+      _downgraded = true;
+      maxDPR = 1;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
+      if (field) { field.draw = Math.floor(field.count * 0.4); field.points.geometry.setDrawRange(0, field.draw); }
+    }
+    _fpsAccum = 0; _fpsFrames = 0;
+  }
 
   // smooth mouse follow
   mouse.x += (mouse.tx - mouse.x) * 0.05;

@@ -7,6 +7,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const lowPerf = document.documentElement.classList.contains("low-perf"); // set by the head script
   const hasGSAP = typeof window.gsap !== "undefined";
   if (hasGSAP && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -341,8 +342,8 @@ document.addEventListener("DOMContentLoaded", () => {
       mx = e.clientX; my = e.clientY;
       dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
 
-      // spawn a sparkle when the cursor moves fast enough (throttled)
-      if (!reduce) {
+      // spawn a sparkle when the cursor moves fast enough (throttled; off on low-end)
+      if (!reduce && !lowPerf) {
         const now = performance.now();
         const speed = Math.hypot(mx - lastX, my - lastY);
         if (now - lastSpark > 32 && speed > 4) { spawnSpark(mx, my); lastSpark = now; }
@@ -664,7 +665,7 @@ document.addEventListener("DOMContentLoaded", () => {
           clearScan();
           if (row) { row.classList.add("scanned"); current = row; ufo.classList.add("scanning"); }
         }
-        if (row) {
+        if (row && !lowPerf) {
           const now = performance.now();
           if (now - lastParticle > 80) { spawnAbduct(lx + (Math.random() - 0.5) * 30, ly + 10); lastParticle = now; }
         }
