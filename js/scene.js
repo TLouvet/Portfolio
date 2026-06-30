@@ -60,8 +60,9 @@ const PERF = (function () {
   const mem = navigator.deviceMemory || 8;
   const coarse = window.matchMedia("(pointer: coarse)").matches;
   const small = window.innerWidth < 760;
-  const low = coarse || small || cores <= 4 || mem <= 4;
-  return { low, coarse, small };
+  const mobile = coarse || small;            // phones/tablets: drop counts hard
+  const low = mobile || cores <= 4 || mem <= 4;
+  return { low, mobile, coarse, small };
 })();
 let maxDPR = PERF.low ? 1 : 1.75; // FPS guard may lower this further
 
@@ -99,7 +100,7 @@ function init() {
 
 // ---- drifting starfield ----
 function buildStarfield() {
-  const count = PERF.low ? 600 : 1400;
+  const count = PERF.mobile ? 300 : (PERF.low ? 600 : 1400);
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
@@ -126,7 +127,7 @@ function buildStarfield() {
 
 // ---- closer "nebula" of cyan dust ----
 function buildNebula() {
-  const count = PERF.low ? 250 : 600;
+  const count = PERF.mobile ? 100 : (PERF.low ? 250 : 600);
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
@@ -146,8 +147,8 @@ function buildNebula() {
 // projected into the same plane and shoves nearby particles outward;
 // each particle springs back to its home with damping. Click = shockwave.
 function buildField() {
-  // scale particle budget to the performance tier
-  const COUNT = PERF.low ? (PERF.small ? 2500 : 5000) : 16000;
+  // scale particle budget to the performance tier — phones get a tiny field
+  const COUNT = PERF.mobile ? 900 : (PERF.low ? 4000 : 16000);
 
   const geo = new THREE.BufferGeometry();
   const pos = new Float32Array(COUNT * 3);
@@ -305,7 +306,7 @@ function makeGlowTexture(stops) {
 function buildComets() {
   const tailTex = makeCometTailTexture();
   const headTex = makeGlowTexture(["rgba(255,255,255,1)", "rgba(120,230,255,0.8)", "rgba(80,120,255,0)"]);
-  const COUNT = PERF.low ? 5 : 10;
+  const COUNT = PERF.mobile ? 3 : (PERF.low ? 5 : 10);
 
   for (let i = 0; i < COUNT; i++) {
     const group = new THREE.Group();
@@ -548,7 +549,7 @@ function projectMouse() {
   raycaster.ray.intersectPlane(dragPlane, mouseWorld);
 }
 
-let _fpsAccum = 0, _fpsFrames = 0, _downgraded = false;
+let _fpsAccum = 0, _fpsFrames = 0;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -561,15 +562,16 @@ function animate() {
   const t = clock.elapsedTime;
   const sp = reduceMotion ? 0.15 : 1;
 
-  // ---- adaptive FPS guard: if it's still struggling, downgrade once ----
+  // ---- adaptive FPS guard: keep shedding load (step by step) until it's smooth ----
   _fpsAccum += dt; _fpsFrames++;
   if (_fpsAccum >= 2) {
     const fps = _fpsFrames / _fpsAccum;
-    if (!_downgraded && fps < 45) {
-      _downgraded = true;
-      maxDPR = 1;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
-      if (field) { field.draw = Math.floor(field.count * 0.4); field.points.geometry.setDrawRange(0, field.draw); }
+    if (fps < 45) {
+      if (maxDPR > 1) { maxDPR = 1; renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); }
+      if (field && field.draw > field.count * 0.25) {
+        field.draw = Math.max(Math.floor(field.count * 0.25), Math.floor(field.draw * 0.6));
+        field.points.geometry.setDrawRange(0, field.draw);
+      }
     }
     _fpsAccum = 0; _fpsFrames = 0;
   }
